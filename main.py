@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from ml_utils import load_model, predict, retrain
 from typing import List
+from datetime import datetime
 
 # defining the main app
 app = FastAPI(title="Iris Predictor", docs_url="/")
@@ -62,3 +63,36 @@ def feedback_loop(data: List[FeedbackIn]):
 if __name__ == "__main__":
     # Uvicorn is used to run the server and listen for incoming API requests on 0.0.0.0:8888
     uvicorn.run("main:app", host="0.0.0.0", port=8888, reload=True)
+
+# Route definitions
+@app.get("/appstatus")
+# Healthcheck route to ensure that the API is up and running
+def appstatus():
+    return {"app": "running successfully","timestamp":datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}
+
+@app.post("/pred_setosa", response_model=QueryOut, status_code=200)
+# Route to do the prediction using the ML model defined.
+# Payload: QueryIn containing the parameters
+# Response: QueryOut containing the flower_class predicted (200)
+def predict_flower(query_data: QueryIn):
+    output = {"flower_class": predict(query_data)}
+    return output
+
+# Route definitions
+@app.get("/status")
+# Healthcheck route to ensure that the API is up and running
+def ping():
+    return {"status": "running"}
+
+@app.post("/pred_versicolor", response_model=QueryOut, status_code=200)
+# Route to do the prediction using the ML model defined.
+# Payload: QueryIn containing the parameters
+# Response: QueryOut containing the flower_class predicted (200)
+def predict_flower(query_data: QueryIn):
+    output = {"flower_class": predict(query_data)}
+    return output
+
+@app.get("/dummy")
+# Healthcheck route to ensure that the API is up and running
+def ping():
+    return {"dummy": "test"}
