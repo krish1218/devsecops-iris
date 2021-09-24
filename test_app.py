@@ -47,9 +47,9 @@ def test_pred_setosa():
         assert response.status_code == 200
         assert response.json() == {"flower_class": "Iris Setosa"}
 
-def test_status():
+def test_teststatus():
     with TestClient(app) as client:
-        response = client.get("/status")
+        response = client.get("/teststatus")
         # asserting the correct response is received
         assert response.status_code == 200
         assert response.json() == {"status": "running"}
@@ -68,9 +68,9 @@ def test_pred_versicolor():
         assert response.status_code == 200
         assert response.json() == {"flower_class": "Iris Versicolour"}
 
-def test_dummy():
+def test_math():
     with TestClient(app) as client:
-        response = client.get("/dummy")
+        response = client.get("/math")
         # asserting the correct response is received
         assert response.status_code == 200
-        assert response.json() == {"dummy": "test"}
+        assert response.json() == {"math": "operations performed successufully"}
